@@ -1,0 +1,10 @@
+clear all; 
+close all;
+clc;
+dir = "./图像处理所需资源/";
+load(strcat(dir, "hall.mat"));
+first_block = double(hall_gray(1:8, 1:8));
+old_C = my_dct2(first_block - 128);
+new_C = my_dct2(first_block);
+new_C(1, 1) = new_C(1, 1) - 128 * 8;
+disp(sum((old_C - new_C).^2, 'all'));
