@@ -2,15 +2,10 @@ clear all;
 close all;
 clc;
 
-function dctD = my_dct_operator(N)
-    col_coe = [1:N-1];
-    row_coe = [1:2:2*N - 1];
-    dctD = cos(col_coe' * row_coe * pi / (2 * N));
-    dctD = sqrt(2/N) * [ones(1, N)/sqrt(2);dctD];
-end
+dir = "./图像处理所需资源/";
+load(strcat(dir, "hall.mat"));
 
-function dct2C = my_dct2(matrix)
-    [rows, cols] = size(matrix);
-    % 初始化结果矩阵
-    dct2C = my_dct_operator(rows) * double(matrix) * my_dct_operator(cols);
-end
+example = double(hall_gray(1:8, 1:8)) - 128;
+dct2C = dct2(example);
+my_dct2C = my_dct2(example);
+disp(max((dct2C - my_dct2C).^2, [], 'all'));
