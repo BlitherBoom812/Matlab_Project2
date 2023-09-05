@@ -1,5 +1,5 @@
-function dct2C = my_dct2(matrix)
-    [rows, cols] = size(matrix);
+function dct2C = my_dct2(dct2P)
+    [rows, cols] = size(dct2P);
     % 初始化结果矩阵
-    dct2C = my_dct_operator(rows) * double(matrix) * my_dct_operator(cols)';
+    dct2C = my_dct_operator(rows) * double(dct2P) * my_dct_operator(cols)';
 end
