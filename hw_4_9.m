@@ -1,5 +1,5 @@
 clear;
-close all; 
+close all;
 clc;
 
 
@@ -9,3 +9,4 @@ load(strcat(dir, "JpegCoeff.mat"));
 
 dct2C_tilde = get_dct2C_tilde(hall_gray, QTAB);
 dct2C_tilde_final = get_dct2C_tilde_final(dct2C_tilde);
+dc_code = get_dc_code(dct2C_tilde_final, DCTAB);
