@@ -18,6 +18,6 @@ for i = 1:length(dct2C_tilde_final)
     ac_code = [ac_code, ac_code_single];
 end
 
-[row, col] = size(hall_gray);
+[jpeg_row, jpeg_col] = size(hall_gray);
 
-save('jpegcode.mat', "col", "row", "ac_code", "dc_code")
+save('jpegcode.mat', "jpeg_col", "jpeg_row", "ac_code", "dc_code")
