@@ -6,12 +6,12 @@ function y = my_b2d(bin)
     elseif bin(1) == 0
         y = 1 - bin;
         y = mat2str(y);
-        y = y(2:end-1);
+        y = regexprep(y, "[\[\]]", "");
         y = bin2dec(y);
         y = -y;
     else
         y = mat2str(bin);
-        y = y(2:end-1);
+        y = regexprep(y, "[\[\]]", "");
         y = bin2dec(y);
     end
 end

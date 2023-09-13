@@ -4,7 +4,7 @@ function dc_decode = get_dc_decode(dc_code, DCTAB)
     dc_decode_diff = [];
     start_idx = 1;
     idx = 1;
-    while idx < length(dc_code) 
+    while idx <= length(dc_code) 
         huffman_code = dc_code(start_idx:idx);
         [row, col] = size(DCTAB);
         cat = -1;

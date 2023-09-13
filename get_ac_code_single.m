@@ -1,7 +1,7 @@
-
+% [1, 10, 3, 0, 0, 2, zeros(1, 20), 1, zeros(1, 37)];
 function ac_code_single = get_ac_code_single(single_block, ACTAB)
-    ZRL = [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1];
-    EOB = [1, 0, 1, 0];
+    ZRL = get_ZRL();
+    EOB = get_EOB();
     zero_num = 0;
     zrl_num = 0;
     ac_code_single = [];

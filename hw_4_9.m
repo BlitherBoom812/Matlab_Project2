@@ -11,6 +11,8 @@ dct2C_tilde = get_dct2C_tilde(hall_gray, QTAB);
 dct2C_tilde_final = get_dct2C_tilde_final(dct2C_tilde);
 dc_code = get_dc_code(dct2C_tilde_final, DCTAB);
 
+dct2C_tilde_final(2:end, 1)'
+
 ac_code = [];
 for i = 1:length(dct2C_tilde_final)
     single_block = dct2C_tilde_final(:, i);
