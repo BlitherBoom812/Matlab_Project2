@@ -16,7 +16,7 @@ imshow(hall_gray);
 title('original')
 subplot(2, 1, 2);
 imshow(hall_gray_recovered);
-imwrite(hall_gray_recovered, "hw_4_11_hall_gray_recoverd.bmp");
+imwrite(hall_gray_recovered, "hw_4_12_hall_gray_recovered.bmp");
 title('decoded');
 % 压缩比
 ac_size = length(ac_code);

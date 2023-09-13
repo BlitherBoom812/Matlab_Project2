@@ -15,7 +15,7 @@ imshow(hall_gray);
 title('original')
 subplot(2, 1, 2);
 imshow(hall_gray_recovered);
-imwrite(hall_gray_recovered, "hw_4_11_hall_gray_recoverd.bmp");
+imwrite(hall_gray_recovered, "hw_4_11_hall_gray_recovered.bmp");
 title('decoded');
 
 MSE = sum((double(hall_gray_recovered) - double(hall_gray)).^2, 'all') / (jpeg_row * jpeg_col);
