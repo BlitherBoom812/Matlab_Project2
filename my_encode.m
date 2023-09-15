@@ -1,5 +1,5 @@
-function [jpeg_row, jpeg_col, dc_code, ac_code] = my_encode(hall_gray, QTAB, DCTAB, ACTAB)
-    dct2C_tilde = get_dct2C_tilde(hall_gray, QTAB);
+function [jpeg_row, jpeg_col, dc_code, ac_code] = my_encode(pic, QTAB, DCTAB, ACTAB)
+    dct2C_tilde = get_dct2C_tilde(pic, QTAB);
     dct2C_tilde_final = get_dct2C_tilde_final(dct2C_tilde);
     dc_code = get_dc_code(dct2C_tilde_final, DCTAB);
         
@@ -10,5 +10,5 @@ function [jpeg_row, jpeg_col, dc_code, ac_code] = my_encode(hall_gray, QTAB, DCT
         ac_code = [ac_code, ac_code_single];
     end
     
-    [jpeg_row, jpeg_col] = size(hall_gray);
+    [jpeg_row, jpeg_col] = size(pic);
 end
