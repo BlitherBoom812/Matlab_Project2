@@ -11,7 +11,7 @@ imwrite(hall_color, 'hw3_2_hall_color.bmp');
 
 % circle
 radius_sqrd = (min(height, width)/2)^2;
-distance_sqrd = repmat(([1:height]' - height / 2).^2, 1, width) + repmat(([1:width] - width / 2).^2, height, 1);
+distance_sqrd = repmat(((1:height)' - height / 2).^2, 1, width) + repmat(((1:width) - width / 2).^2, height, 1);
 circle = distance_sqrd <= radius_sqrd & distance_sqrd > 0.96 * radius_sqrd;
 
 % red
