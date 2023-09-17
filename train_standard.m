@@ -7,13 +7,6 @@ function [v, L] = train_standard(dir, L)
     v = u / length(image_list);
 end
 
-
-function [R, G, B] = get_RGB(n, L)
-    R = uint8(floor(n / power(2, 2 * L)));
-    G = uint8(floor((n - R) / power(2, L)));
-    B = uint8(floor((n - R - G)));
-end
-
 function image_list = read_bmp(folder)
     filePattern = fullfile(folder, '*.bmp');
     bmpFiles = dir(filePattern);

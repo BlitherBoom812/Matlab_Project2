@@ -5,7 +5,7 @@ dir = "./图像处理所需资源/";
 load(strcat(dir, "hall.mat"));
 subplot(1, 3, 1);
 imshow(hall_color);
-imwrite(hall_color, 'hw3_2_hall_color.bmp');
+imwrite(hall_color, 'hw1_3_2_hall_color.bmp');
 
 [height, width, ~] = size(hall_color);
 
@@ -31,7 +31,7 @@ hall_circle(:, :, 2) = hall_green;
 hall_circle(:, :, 3) = hall_blue;
 subplot(1, 3, 2);
 imshow(hall_circle);
-imwrite(hall_circle, 'hw3_2_hall_circle.bmp');
+imwrite(hall_circle, 'hw_1_3_2_hall_circle.bmp');
 
 % chessboard
 length = 36;
@@ -51,11 +51,11 @@ hall_green(chessboard) = uint8(0);
 hall_blue = hall_color(:, :, 3);
 hall_blue(chessboard) = uint8(0);
 
-% draw circle
+% draw chessboard
 hall_chessboard = uint8(ones(height, width, 3));
 hall_chessboard(:, :, 1) = hall_red;
 hall_chessboard(:, :, 2) = hall_green;
 hall_chessboard(:, :, 3) = hall_blue;
 subplot(1, 3, 3);
 imshow(hall_chessboard);
-imwrite(hall_chessboard, 'hw3_2_hall_chessboard.bmp');
+imwrite(hall_chessboard, 'hw_1_3_2_hall_chessboard.bmp');

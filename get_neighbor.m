@@ -1,5 +1,3 @@
-
-
 function [map_r, visited_r] = get_neighbor(map, j, k, visited, map_ori)
     [rows, cols] = size(map);
     visited_r = visited;

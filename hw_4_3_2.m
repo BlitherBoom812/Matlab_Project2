@@ -23,8 +23,6 @@ subplot(3, 1, 3);
 [v, L] = train_standard(face_dir, 5);
 wrap(test, v, L, 0.92, 8);
 
-
-
 function wrap(pic, v, L, ths, min_face_size)
     squared_pic = detect_faces(pic, v, L, ths, min_face_size);
     draw(squared_pic, L, ths, min_face_size);
