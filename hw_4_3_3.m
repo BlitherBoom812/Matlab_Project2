@@ -10,27 +10,22 @@ test = imread(strcat(dir, "awf.jpg"));
 % 画图
 figure;
 
-subplot(4, 1, 1);
+subplot(3, 1, 1);
 [v, L] = train_standard(face_dir, 3);
 test_rot90 = rot90(test);
-wrap(test_rot90, v, L, 0.6, 2, 'rot90');
+wrap(test_rot90, v, L, 0.6, 4, 'rot90');
 
 
-subplot(4, 1, 2);
+subplot(3, 1, 2);
 [v, L] = train_standard(face_dir, 3);
 test_scaledw2 = imresize(test, [size(test, 1), size(test, 2)*2]);
-wrap(test_scaledw2, v, L, 0.6, 2, 'scaledw2');
+wrap(test_scaledw2, v, L, 0.6, 4, 'scaledw2');
 
 
-subplot(4, 1, 3);
+subplot(3, 1, 3);
 [v, L] = train_standard(face_dir, 3);
-test_light = test + 50;
-wrap(test_light, v, L, 0.6, 2, 'light');
-
-subplot(4, 1, 4);
-[v, L] = train_standard(face_dir, 3);
-test_dark = test - 50;
-wrap(test_dark, v, L, 0.6, 2, 'dark');
+test_light = imadjust(test, [0.2 0.8]);
+wrap(test_light, v, L, 0.6, 4, 'light');
 
 
 
