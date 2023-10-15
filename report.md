@@ -21,7 +21,7 @@ Matlab R2023a
 
 输入help images后得到：
 
-~~~
+```
   Image file I/O.
     analyze75info       - Read metadata from header file of Mayo Analyze 7.5 data set.
     analyze75read       - Read image file of Mayo Analyze 7.5 data set.
@@ -72,17 +72,17 @@ Matlab R2023a
     exrinfo         - Read metadata from EXR file
     exrwrite        - Write image data to EXR file
     exrHalfAsSingle - Convert numeric values into half-precision values
-~~~
+```
 
 我们将使用这些函数进行实验。
 
 #### 2. 圆与棋盘
 
-利用`imread`完成图片读取，利用`imshow``imwrite`完成图片写入。
+利用 `imread`完成图片读取，利用 `imshow``imwrite`完成图片写入。
 
 画圆代码：
 
-~~~matlab
+```matlab
 [height, width, ~] = size(hall_color);
 
 % circle
@@ -108,13 +108,13 @@ subplot(1, 3, 2);
 imshow(hall_circle);
 imwrite(hall_circle, 'hw1_3_2_hall_circle.bmp');
 
-~~~
+```
 
 上述代码将半径0.96~1倍的部分涂成红色。
 
 画棋盘代码：
 
-~~~matlab
+```matlab
 
 % chessboard
 length = 36;
@@ -143,13 +143,13 @@ subplot(1, 3, 3);
 imshow(hall_chessboard);
 imwrite(hall_chessboard, 'hw1_3_2_hall_chessboard.bmp');
 
-~~~
+```
 
 效果如图：
 
 ![image-20230917110812169](D:\STUDY\课程资料\Matlab\图像处理大作业\图像处理大作业\report.assets\image-20230917110812169.png)
 
-本问题代码位于`hw_1_3_2.m`中，图片文件分别为`hw_1_3_2_hall_circle.bmp`和`hw_1_3_2_hall_chessboard.bmp`。
+本问题代码位于 `hw_1_3_2.m`中，图片文件分别为 `hw_1_3_2_hall_circle.bmp`和 `hw_1_3_2_hall_chessboard.bmp`。
 
 ### （二）图像压缩编码
 
@@ -157,13 +157,13 @@ imwrite(hall_chessboard, 'hw1_3_2_hall_chessboard.bmp');
 
 由于DCT是线性变换，所以在空域减去128，等于对DCT域减去128的DCT变换，只需要对DCT矩阵的左上角减去一个直流分量即可。
 
-~~~matlab
+```matlab
 first_block = double(hall_gray(1:8, 1:8));
 old_C = dct2(first_block - 128);
 new_C = dct2(first_block);
 new_C(1, 1) = new_C(1, 1) - 128 * 8;
 disp(max((old_C - new_C).^2, [], 'all'));
-~~~
+```
 
 将两种方式进行比较，误差采用各个元素的完全平方差的最大值来衡量，得到结果：
 
@@ -171,39 +171,39 @@ disp(max((old_C - new_C).^2, [], 'all'));
 
 可见两种方式的实现效果基本相同。
 
-本问题代码位于`hw_2_4_1.m`中。
+本问题代码位于 `hw_2_4_1.m`中。
 
 #### 2. 实现2维dct
 
 首先实现1维dct矩阵：
 
-~~~matlab
+```matlab
 function dctD = my_dct_operator(N)
     col_coe = [1:N-1];
     row_coe = [1:2:2*N - 1];
     dctD = cos(col_coe' * row_coe * pi / (2 * N));
     dctD = sqrt(2/N) * [ones(1, N)/sqrt(2);dctD];
 end
-~~~
+```
 
 然后利用公式$C = DPD^T$来计算变换结果：
 
-~~~matlab
+```matlab
 function dct2C = my_dct2(dct2P)
     [rows, cols] = size(dct2P);
     % 初始化结果矩阵
     dct2C = my_dct_operator(rows) * double(dct2P) * my_dct_operator(cols)';
 end
-~~~
+```
 
 对比库中的dct2：
 
-~~~matlab
+```matlab
 example = double(hall_gray(1:8, 1:8)) - 128;
 dct2C = dct2(example);
 my_dct2C = my_dct2(example);
 disp(max((dct2C - my_dct2C).^2, [], 'all'));
-~~~
+```
 
 误差采用各个元素的完全平方差的最大值来衡量，得到结果：
 
@@ -211,13 +211,13 @@ disp(max((dct2C - my_dct2C).^2, [], 'all'));
 
 可见与官方库的实现效果基本相同。
 
-本问题代码位于`hw_2_4_2.m`中。
+本问题代码位于 `hw_2_4_2.m`中。
 
 #### 3. 四列置零
 
 代码实现如下：
 
-~~~matlab
+```matlab
 
 subplot(1, 3, 1);
 imshow(hall_gray);
@@ -249,7 +249,7 @@ function dct2C = dct2C_cut_left(dct2P)
     dct2C = dct2(dct2P);
     dct2C(:, 1:4) = 0;
 end
-~~~
+```
 
 展现效果如下：
 
@@ -261,17 +261,15 @@ end
 
 左上对应的是横向和纵向的低频分量，左下对应的是纵向的高频分量，去掉之后，纵向的低频和高频分量都被去掉，因此纵向纹理消失；横向的低频分量被去掉，但高频分量还在，因此横向纹理中色彩变化激烈的部分被保留下来。
 
-本问题代码位于`hw_2_4_3.m`中，图片位于。
+本问题代码位于 `hw_2_4_3.m`中，图片位于。
 
-本问题代码位于`hw_2_4_3.m`中。`hw_2_4_3_*.bmp`中保存了图像文件。
-
-
+本问题代码位于 `hw_2_4_3.m`中。`hw_2_4_3_*.bmp`中保存了图像文件。
 
 #### 4. 转置与旋转
 
 将DCT系数矩阵转置和旋转的代码如下：
 
-~~~matlab
+```matlab
 clear all;
 close all; 
 clc;
@@ -322,9 +320,7 @@ end
 function dct2C = my_dct2_rotate180(dct2P)
     dct2C = rot90(dct2(dct2P), 2);
 end
-~~~
-
-
+```
 
 ![image-20230917113210036](D:\STUDY\课程资料\Matlab\图像处理大作业\图像处理大作业\report.assets\image-20230917113210036.png)
 
@@ -336,13 +332,13 @@ end
 
 旋转180会将低频分量系数转移到高频分量系数的位置上，图片在横向和纵向上的变化的都很激烈。
 
-本问题代码位于`hw_2_4_4.m`中。`hw_2_4_4_*.bmp`中保存了图像文件。
+本问题代码位于 `hw_2_4_4.m`中。`hw_2_4_4_*.bmp`中保存了图像文件。
 
 #### 5. 差分编码
 
 差分编码的频率响应：
 
-~~~matlab
+```matlab
 % y(n) = -x(n) + x(n - 1)
 a = [1];
 b = [-1, 1];
@@ -350,7 +346,7 @@ figure;
 zplane(b, a);
 figure;
 freqz(b, a);
-~~~
+```
 
 结果：
 
@@ -358,7 +354,7 @@ freqz(b, a);
 
 它是一个高通滤波器，低频的分量会被除去，因此，图像DC系数的高频分量更多。
 
-本问题代码位于`hw_2_4_5.m`中。
+本问题代码位于 `hw_2_4_5.m`中。
 
 #### 6. DC 预测误差与 Category
 
@@ -368,20 +364,20 @@ Category实际上就是DC预测误差的二进制表示的位数。因此，我�
 
 `zigzagScan.m`：
 
-~~~matlab
+```matlab
 
 function zigzag = zigzagScan(matrix)
     [rows, cols] = size(matrix);
     zigzag = zeros(1, rows * cols);
-    
+  
     row = 1;
     col = 1;
     index = 1;
     direction = 'up';  % 初始方向向上
-    
+  
     while index <= rows * cols
         zigzag(index) = matrix(row, col);
-        
+      
         if strcmp(direction, 'up')
             if col == cols
                 row = row + 1;
@@ -405,17 +401,17 @@ function zigzag = zigzagScan(matrix)
                 col = col - 1;
             end
         end
-        
+      
         index = index + 1;
     end
 end
-~~~
+```
 
 我们采用一个字符串保存当前游走的方向（右和上视为 up，左和下视为 down），当遇到边界时就改变扫描方向。
 
 测试矩阵为一个按照zigzag顺序排列的矩阵，扫描后变成一个顺序排列的行向量。
 
-~~~matlab
+```matlab
 test_matrix = [ ...
  1, 2, 6, 7, 15, 16, 28, 29; ...
  3, 5, 8, 14, 17, 27, 30, 43; ...
@@ -430,36 +426,36 @@ zigzag = zigzagScan(test_matrix);
 
 % 输出是等差数列，证明算法通过测试
 disp(zigzag);
-~~~
+```
 
 ![image-20230917114650194](D:\STUDY\课程资料\Matlab\图像处理大作业\图像处理大作业\report.assets\image-20230917114650194.png)
 
-本问题代码位于`hw_2_4_7.m`中。
+本问题代码位于 `hw_2_4_7.m`中。
 
 #### 8. 量化
 
 `quantify_block.m`对每个DCT系数矩阵进行量化：
 
-~~~matlab
+```matlab
 function Q = quantify_block(block, quantify)
     Q = round(block ./ quantify);
 end
-~~~
+```
 
 `get_dct2C_tilde.m`对图像分块处理，调用量化函数：
 
-~~~matlab
+```matlab
 function dct2C_tilde = get_dct2C_tilde(hall_gray, QTAB)
     dct2P = double(hall_gray) - 128;
     dct2C = blockproc(dct2P, [8, 8], @(blk) dct2(blk.data));
     dct2C_tilde = blockproc(dct2C, [8, 8], @(blk) quantify_block(blk.data, QTAB));
     dct2C_tilde = blockproc(dct2C_tilde, [8, 8], @(blk) zigzagScan(blk.data)');
 end
-~~~
+```
 
 `get_dct2C_tilde_final.m`将矩阵转换为题目指定的格式：
 
-~~~matlab
+```matlab
 
 function dct2C_tilde_final = get_dct2C_tilde_final(dct2C_tilde)
     [rows, cols] = size(dct2C_tilde);
@@ -474,15 +470,15 @@ function dct2C_tilde_final = get_dct2C_tilde_final(dct2C_tilde)
         end
     end
 end
-~~~
+```
 
-本问题代码位于`hw_2_4_8.m`中。
+本问题代码位于 `hw_2_4_8.m`中。
 
 #### 9. 实现 JPEG 码流
 
-`hw_2_4_8.m`实现 JPEG 编码并保存到`jpegcode.mat`：
+`hw_2_4_8.m`实现 JPEG 编码并保存到 `jpegcode.mat`：
 
-~~~matlab
+```matlab
 dir = "./图像处理所需资源/";
 load(strcat(dir, "hall.mat"));
 load(strcat(dir, "JpegCoeff.mat"));
@@ -490,30 +486,30 @@ load(strcat(dir, "JpegCoeff.mat"));
 [jpeg_row, jpeg_col, dc_code, ac_code] = my_encode(hall_gray, QTAB, DCTAB, ACTAB);
 
 save('jpegcode.mat', "jpeg_col", "jpeg_row", "ac_code", "dc_code")
-~~~
+```
 
 `my_encode.m`实现 JPEG 编码部分：
 
-~~~matlab
+```matlab
 function [jpeg_row, jpeg_col, dc_code, ac_code] = my_encode(pic, QTAB, DCTAB, ACTAB)
     dct2C_tilde = get_dct2C_tilde(pic, QTAB);
     dct2C_tilde_final = get_dct2C_tilde_final(dct2C_tilde);
     dc_code = get_dc_code(dct2C_tilde_final, DCTAB);
-        
+      
     ac_code = [];
     for i = 1:length(dct2C_tilde_final)
         single_block = dct2C_tilde_final(:, i);
         ac_code_single = get_ac_code_single(single_block, ACTAB);
         ac_code = [ac_code, ac_code_single];
     end
-    
+  
     [jpeg_row, jpeg_col] = size(pic);
 end
-~~~
+```
 
 其中，`get_dc_code.m`实现 DC 部分的熵编码：
 
-~~~matlab
+```matlab
 function dc_code = get_dc_code(dct2C_tilde, DCTAB)
     dc = dct2C_tilde(1, :)';
     dc_diff = [dc(1);-diff(dc)];
@@ -532,11 +528,11 @@ function dc_code = get_dc_code(dct2C_tilde, DCTAB)
         );
     dc_code = cell2mat(dc_code);
 end
-~~~
+```
 
 `get_ac_code_single.m`实现单个图像块 AC 部分的熵编码：
 
-~~~matlab
+```matlab
 function ac_code_single = get_ac_code_single(single_block, ACTAB)
     ZRL = get_ZRL();
     EOB = get_EOB();
@@ -569,15 +565,15 @@ function ac_code_single = get_ac_code_single(single_block, ACTAB)
     end
     ac_code_single = [ac_code_single, EOB];
 end
-~~~
+```
 
-本问题代码位于`hw_2_4_9.m`中。
+本问题代码位于 `hw_2_4_9.m`中。
 
 #### 10. 计算压缩比
 
 原图像的大小为 `row * col` Byte（每个像素点用一个 Byte 表示），压缩后图像的大小为 `(ac_size + dc_size) / 8` Byte。
 
-~~~matlab
+```matlab
 load("jpegcode.mat");
 
 ac_size = length(ac_code);
@@ -590,7 +586,7 @@ after_size = (ac_size + dc_size) / 8;
 fprintf("压缩前：%d Bytes\n", before_size);
 fprintf("压缩后：%f Bytes\n", after_size);
 fprintf("压缩比：%f\n", before_size / after_size);
-~~~
+```
 
 计算结果：
 
@@ -598,13 +594,13 @@ fprintf("压缩比：%f\n", before_size / after_size);
 
 压缩比为6.424730
 
-本问题代码位于`hw_2_4_10.m`中。
+本问题代码位于 `hw_2_4_10.m`中。
 
 #### 11. JPEG 解码
 
-`hw_2_4_11.m`实现从`jpegcode.mat`中读取数据并 JPEG 解码：
+`hw_2_4_11.m`实现从 `jpegcode.mat`中读取数据并 JPEG 解码：
 
-~~~matlab
+```matlab
 
 load("jpegcode.mat");
 
@@ -625,11 +621,11 @@ title('decoded');
 MSE = sum((double(hall_gray_recovered) - double(hall_gray)).^2, 'all') / (jpeg_row * jpeg_col);
 PSNR = 10* log10(255^2 / MSE);
 fprintf("PSNR: %f\n", PSNR);
-~~~
+```
 
 `my_decode.m`包含 JPEG 解码的具体实现：
 
-~~~matlab
+```matlab
 function decoded = my_decode(jpeg_row, jpeg_col, dc_code, ac_code, QTAB, DCTAB, ACTAB)
     % decode dc
     dc_decode = get_dc_decode(dc_code, DCTAB);
@@ -639,11 +635,11 @@ function decoded = my_decode(jpeg_row, jpeg_col, dc_code, ac_code, QTAB, DCTAB, 
     dct2C_tilde_recovered = get_dct2C_tilde_recovered([dc_decode; ac_decode], jpeg_row * 8, jpeg_col / 8);
     decoded = get_hall_gray_recovered(dct2C_tilde_recovered, QTAB);
 end
-~~~
+```
 
 `get_dc_decode.m`对 DC 码流进行解码：
 
-~~~matlab
+```matlab
 function dc_decode = get_dc_decode(dc_code, DCTAB)
     % decode dc
     dc_code = reshape(dc_code, 1, length(dc_code));
@@ -675,11 +671,11 @@ function dc_decode = get_dc_decode(dc_code, DCTAB)
     dc_decode = cumsum([dc_decode_diff(1), -dc_decode_diff(2:end)]);
 
 end
-~~~
+```
 
 `get_ac_decode.m`对 AC 码流进行解码：
 
-~~~matlab
+```matlab
 function ac_decode = get_ac_decode(ac_code, ACTAB)
     ac_decode = [];
     ZRL = get_ZRL();
@@ -738,11 +734,11 @@ function ac_decode = get_ac_decode(ac_code, ACTAB)
         end
     end
 end
-~~~
+```
 
 `get_dct2C_tilde_recovered.m` 将DCT系数矩阵恢复到分块矩阵的形式：
 
-~~~matlab
+```matlab
 function dct2C_tilde = get_dct2C_tilde_recovered(dct2C_tilde_final, row, col)
     dct2C_tilde = zeros(row, col);
     idx = 1;
@@ -757,20 +753,18 @@ function dct2C_tilde = get_dct2C_tilde_recovered(dct2C_tilde_final, row, col)
         end
     end
 end
-~~~
-
-
+```
 
 `get_hall_gray_recovered.m`将每个图像块对应的DCT系数矩阵通过逆变换转换回图像：
 
-~~~matlab
+```matlab
 function hall_gray_recovered = get_hall_gray_recovered(dct2C_tilde, QTAB)
     dct2C_tilde = blockproc(dct2C_tilde, [64, 1], @(blk) zigzagScanInv(blk.data, 8, 8));
     dct2C = blockproc(dct2C_tilde, [8, 8], @(blk) quantify_block_inv(blk.data, QTAB));
     dct2P =  blockproc(dct2C, [8, 8], @(blk) idct2(blk.data));
     hall_gray_recovered = uint8(dct2P + 128);
 end
-~~~
+```
 
 运行结果：
 
@@ -780,13 +774,13 @@ end
 
 `my_psnr.m`计算得到 PSNR：
 
-~~~matlab
+```matlab
 function PSNR = my_psnr(pic_recovered, pic)
     [jpeg_row, jpeg_col] = size(pic);
     MSE = sum((double(pic_recovered) - double(pic)).^2, 'all') / (jpeg_row * jpeg_col);
     PSNR = 10* log10(255^2 / MSE);
 end
-~~~
+```
 
 计算结果：
 
@@ -798,13 +792,13 @@ end
 
 与原图相比，解码的图“模糊”一些，这是舍弃高频分量的结果。且在一些地方有明显的不连续感，似乎被一些“方块”分隔开来，这是分块处理导致的。
 
-本问题代码位于`hw_2_4_11.m`中。图片位于`hw_2_4_11_*.bmp`中。
+本问题代码位于 `hw_2_4_11.m`中。图片位于 `hw_2_4_11_*.bmp`中。
 
 #### 12. 量化步长减半
 
-`hw_2_4_12.m`将`QTAB`减半后重新进行编解码，并计算压缩比和 PSNR：
+`hw_2_4_12.m`将 `QTAB`减半后重新进行编解码，并计算压缩比和 PSNR：
 
-~~~matlab
+```matlab
 
 dir = "./图像处理所需资源/";
 load(strcat(dir, "hall.mat"));
@@ -837,7 +831,7 @@ fprintf("压缩比：%f\n", before_size / after_size);
 MSE = sum((double(hall_gray_recovered) - double(hall_gray)).^2, 'all') / (jpeg_row * jpeg_col);
 PSNR = 10* log10(255^2 / MSE);
 fprintf("PSNR: %f\n", PSNR);
-~~~
+```
 
 结果：
 
@@ -849,13 +843,13 @@ fprintf("PSNR: %f\n", PSNR);
 
 量化步长减半，导致被舍弃的高频分量变少，图像信息更完整，因此 PSNR 上升；量化步长减半带来了量化系数的增加，因而对应的熵编码长度增加，压缩比下降。
 
-本问题代码位于`hw_2_4_12.m`中。图片位于`hw_2_4_12_*.bmp`中。
+本问题代码位于 `hw_2_4_12.m`中。图片位于 `hw_2_4_12_*.bmp`中。
 
 #### 13. 雪花图像处理
 
 对雪花图像编解码：
 
-~~~matlab
+```matlab
 dir = "./图像处理所需资源/";
 load(strcat(dir, "snow.mat"));
 load(strcat(dir, "JpegCoeff.mat"));
@@ -887,7 +881,7 @@ fprintf("压缩比：%f\n", before_size / after_size);
 MSE = sum((double(snow_recovered) - double(snow)).^2, 'all') / (jpeg_row * jpeg_col);
 PSNR = 10* log10(255^2 / MSE);
 fprintf("PSNR: %f\n", PSNR);
-~~~
+```
 
 结果如图：
 
@@ -899,15 +893,15 @@ fprintf("PSNR: %f\n", PSNR);
 
 雪花图像的变化频率很高，高频分量多，因此量化时失去的高频分量更多，恢复图像后失真明显；同时高频分量多也导致量化值的增加，熵编码的长度增加，压缩比下降。
 
-本问题代码位于`hw_2_4_13.m`中。图片位于`hw_2_4_13_*.bmp`中。
+本问题代码位于 `hw_2_4_13.m`中。图片位于 `hw_2_4_13_*.bmp`中。
 
-#### （三）信息隐藏
+### （三）信息隐藏
 
 #### 1. 空域信息隐藏
 
 我们将信息编码为二进制（value_hide），隐藏在每一个像素点的最低位：
 
-~~~matlab
+```matlab
 dir = "./图像处理所需资源/";
 load(strcat(dir, "hall.mat"));
 load(strcat(dir, "JpegCoeff.mat"));
@@ -968,7 +962,7 @@ function value = space_show(pic_hide)
         end
     end
 end
-~~~
+```
 
 运行结果：
 
@@ -978,15 +972,15 @@ end
 
 虽然可以实现信息隐藏，但是压缩后信息发生丢失，正确率很低。而 bmp 文件在传输中有诸多不便，也不是流行的图片保存方式，因此空域隐藏有很多局限性。
 
-本问题代码位于`hw_3_4_1.m`中。图片位于`hw_3_4_1_*.bmp`中。
+本问题代码位于 `hw_3_4_1.m`中。图片位于 `hw_3_4_1_*.bmp`中。
 
 #### 2. DCT域信息隐藏
 
 实现了三种信息隐藏的方法：在所有DCT矩阵的系数最后一位隐藏，在DCT矩阵的直流分量的最后一位隐藏， 通过[1, -1]编码在末尾非零元素的后面隐藏。信息采用随机数的方式生成。
 
-实现方式分别记录于函数`dct_hide1` `dct_hide2` `dct_hide3`中。
+实现方式分别记录于函数 `dct_hide1` `dct_hide2` `dct_hide3`中。
 
-~~~matlab
+```matlab
 dir = "./图像处理所需资源/";
 load(strcat(dir, "hall.mat"));
 load(strcat(dir, "JpegCoeff.mat"));
@@ -1183,7 +1177,7 @@ function pic_recovered = run_hide(value_hide, pic, QTAB, DCTAB, ACTAB, hide_name
             correct = correct + 1;
         end
     end
-    
+  
     disp(['正确率：', mat2str(correct / length(value_hide))]);
 
     disp(['PSNR: ', mat2str(my_psnr(pic_recovered, pic))]);
@@ -1193,10 +1187,10 @@ function pic_recovered = run_hide(value_hide, pic, QTAB, DCTAB, ACTAB, hide_name
 
     before_size = jpeg_row * jpeg_col;
     after_size = (ac_size + dc_size) / 8;
-    
+  
     fprintf("压缩比：%f\n", before_size / after_size);
 end
-~~~
+```
 
 运行结果：
 
@@ -1212,17 +1206,21 @@ end
 
 ![image-20230917134357176](D:\STUDY\课程资料\Matlab\图像处理大作业\图像处理大作业\report.assets\image-20230917134357176.png)
 
-原因分析：方法一对每一个 DCT 系数都造成了影响，因此对图像质量的干扰较大，而且可能增加了矩阵中 0 的数量，导致压缩率降低；方法二仅微调 DCT 系数矩阵的 DC 系数，而根据第二章练习题第5题的分析，DC 系数中高频分量较多，微调对这些高频分量不会造成太大的影响，对图像整体影响不大，且这样的修改基本不会造成 DC 编码长度的改变，压缩比与原图一致；方法三修改末尾的0，也会降低一些压缩比，而且末尾部分对应高频分量系数，将这些分量修改为非 0 值，会导致更多的高频分量出现，因而图像颜色会发生高频率变化，显得有点“脏”。
+原因分析：方法一对每一个 DCT 系数都造成了影响，因此对图像质量的干扰较大，而且可能增加了矩阵中 0 的数量，导致压缩率降低；方法二仅微调 DCT 系数矩阵的 DC 系数，而根据第二章练习题第5题的分析，DC 系数通过差分编码之后滤去了DC系数的低频分量，高频分量占主要成分，微调DC系数对这些高频分量不会造成太大的影响，对图像整体影响不大，且这样的修改基本不会造成 DC 编码长度的改变，压缩比与原图一致；方法三修改末尾的0，也会降低一些压缩比，而且末尾部分对应高频分量系数，将这些分量修改为非 0 值，会导致更多的高频分量出现，因而图像颜色会发生高频率变化，显得有点“脏”。
 
-本问题代码位于`hw_3_4_2.m`中。图片位于`hw_3_4_2_*.bmp`中。
+本问题代码位于 `hw_3_4_2.m`中。图片位于 `hw_3_4_2_*.bmp`中。
 
 ### （四）人脸检测
 
 #### 1. 训练人脸
 
+a) 不需要。样本的人脸大小不一致，但是我们训练采用的是各颜色占区域的比例，经过了归一化操作，因此图像的大小不会干扰训练结果。
+
+b)
+
 采用$L = 3, 4, 5$分别进行训练：
 
-~~~matlab
+```matlab
 
 dir = "./图像处理所需资源/";
 face_dir = strcat(dir, "Faces/");
@@ -1236,11 +1234,11 @@ subplot(3, 1, 3);
 [v, L] = train_standard(face_dir, 5);
 plot(v);
 save("train_standard.mat", "v", "L", '-mat');
-~~~
+```
 
 `train_standard.m`计算所有图像的区域特征$\mathbf u(R_i)$，并求平均值$\mathbf v$：
 
-~~~matlab
+```matlab
 function [v, L] = train_standard(dir, L)
     image_list = read_bmp(dir);
     u = zeros(1, power(2, 3 * L));
@@ -1263,11 +1261,11 @@ function image_list = read_bmp(folder)
         image_list(end + 1) = {image};
     end
 end
-~~~
+```
 
 `get_characteristic.m`计算单张图像的特征：
 
-~~~matlab
+```matlab
 function u = get_characteristic(pic, L)
     [row, col, ~] = size(pic);
     u = zeros(1, power(2, 3 * L));
@@ -1279,25 +1277,31 @@ function u = get_characteristic(pic, L)
     end
     u = u / (row * col);
 end
-~~~
+```
 
-本问题代码位于`hw_4_3_1.m`中。
+运行结果：
+
+![image-20231015221809364](D:\STUDY\课程资料\Matlab\图像处理大作业\图像处理大作业\report.assets\image-20231015221809364.png)
+
+如上图所示，从上到下依次是 $L = 3, 4, 5$ 时 $\mathbf v$ 的分布图。可见，$L$值关系到“尖峰”的数量（即样本颜色的分辨能力）：$L$ 越大，则尖峰越多。这是因为 $L$ 越大，则颜色的分辨能力越强，对于不同的颜色会被区分到不同的分量中； $L$ 越小，则颜色相近的颜色会被简并到同一个分量中，分辨能力下降。
+
+本问题代码位于 `hw_4_3_1.m`中。
 
 #### 2. 人脸检测
 
-核心函数`is_face.m`计算并返回区域与人脸的距离：
+核心函数 `is_face.m`计算并返回区域与人脸的距离：
 
-~~~matlab
+```matlab
 % 分块检测
 function d = is_face(single_block, v, L)
     u = get_characteristic(single_block, L);
     d = 1 - sqrt(u) * sqrt(v');
 end
-~~~
+```
 
-`detect_faces.m`接受测试图像并返回人脸部分带红框的图像。将图像划分为`block_size * block_size`大小的区块，每一块利用`is_face`函数判别是否为人脸，将判别为人脸的区块用矩形标注出来：
+`detect_faces.m`接受测试图像并返回人脸部分带红框的图像。将图像划分为 `block_size * block_size`大小的区块，每一块利用 `is_face`函数判别是否为人脸，将判别为人脸的区块用矩形标注出来：
 
-~~~matlab
+```matlab
 
 function result = detect_faces(test, v, L, ths, min_face_size)
     % 预处理
@@ -1314,13 +1318,13 @@ function result = detect_faces(test, v, L, ths, min_face_size)
     squared_pic_ext = blockproc(test_ext, [block_size, block_size], @(blk) make_red(blk, squares));
     result = squared_pic_ext(1:rows, 1:cols, :);
 end
-~~~
+```
 
 其中，矩形标注的算法如下：
 
 `get_neighbor.m`计算连通的人脸区块：
 
-~~~matlab
+```matlab
 function [map_r, visited_r] = get_neighbor(map, j, k, visited, map_ori)
     [rows, cols] = size(map);
     visited_r = visited;
@@ -1342,11 +1346,11 @@ function [map_r, visited_r] = get_neighbor(map, j, k, visited, map_ori)
         end
     end
 end
-~~~
+```
 
 `get_square.m`将连通的人脸区块用最小的矩形标注出来：
 
-~~~matlab
+```matlab
 function [top, bottom, left, right] = get_square(area, min_face_size)
     [row, col] = size(area);
     top = row + 1;
@@ -1372,17 +1376,17 @@ function [top, bottom, left, right] = get_square(area, min_face_size)
         end
     end
 end
-~~~
+```
 
 `get_all_squares.m`收集所有矩形，并根据条件判别是否识别为人脸（过小的矩形不被认为是人脸）：
 
-~~~matlab
+```matlab
 function squares = get_all_squares(pic, valid, v, L, ths, min_face_size)
     [row, col] = size(valid);
-    
+  
     visited = false(size(valid));
     squares = false(size(valid));
-    
+  
     for k=1:row
         for j=1:col
             if valid(k, j) & ~visited(k, j)
@@ -1395,7 +1399,7 @@ function squares = get_all_squares(pic, valid, v, L, ths, min_face_size)
                         square(top, l) = true;
                         square(bottom, l) = true;
                     end
-                    
+                  
                     for l = top:bottom
                         square(l, left) = true;
                         square(l, right) = true;
@@ -1406,11 +1410,11 @@ function squares = get_all_squares(pic, valid, v, L, ths, min_face_size)
         end
     end
 end
-~~~
+```
 
-`hw_4_3_2.m`分别取$L = 3, 4, 5$，并采用不同的阈值，调用`detect_faces`函数识别人脸。
+`hw_4_3_2.m`分别取$L = 3, 4, 5$，并采用不同的阈值，调用 `detect_faces`函数识别人脸。
 
-~~~matlab
+```matlab
 dir = "./图像处理所需资源/";
 face_dir = strcat(dir, "Faces/");
 test = imread(strcat(dir, "awf.jpg"));
@@ -1442,9 +1446,9 @@ function draw(pic, L, ths, min_face_size)
     imwrite(pic, sprintf("hw_4_3_2_squared_pic_L_%s.bmp", mat2str(L)));
     title(sprintf("L = %s, ths = %s, min face size = %s", mat2str(L), mat2str(ths), mat2str(min_face_size)));
 end
-~~~
+```
 
-我们选用第七届“龙芯杯”比赛照片作为测试图片（放在`./图像处理所需资源/`中）：
+我们选用第七届“龙芯杯”比赛照片作为测试图片（放在 `./图像处理所需资源/`中）：
 
 ![](D:\STUDY\课程资料\Matlab\图像处理大作业\图像处理大作业\图像处理所需资源\awf.jpg)
 
@@ -1454,13 +1458,13 @@ end
 
 `ths`表示被判别为人脸的最小“距离”阈值。`min face size`表示最小的人脸区块大小。
 
-$L = 3, 4, 5$条件下，均成功检测出人脸图像，但是从阈值`ths`来看，$L$的值越大，则距离阈值需要更大才能检测出人脸。这是因为$L$增大，颜色更加丰富，则人脸的判别条件更加“严格”，计算得到的距离也更大。同时，$L$增大后，红框的范围也变得更准确了，这是因为$L$的增加使得人脸检测的能力更强，能够更完整的标注人脸部分。
+$L = 3, 4, 5$条件下，均成功检测出人脸图像，但是从阈值 `ths`来看，$L$的值越大，则距离阈值需要更大才能检测出人脸。这是因为$L$增大，颜色更加丰富，则人脸的判别条件更加“严格”，计算得到的距离也更大。同时，$L$增大后，红框的范围也变得更准确了，这是因为$L$的增加使得人脸检测的能力更强，能够更完整的标注人脸部分。
 
-本问题代码位于`hw_4_3_2.m`中。相关图片位于`hw_4_3_2_*.bmp`中。
+本问题代码位于 `hw_4_3_2.m`中。相关图片位于 `hw_4_3_2_*.bmp`中。
 
 #### 3. 图像变换
 
-~~~matlab
+```matlab
 dir = "./图像处理所需资源/";
 face_dir = strcat(dir, "Faces/");
 test = imread(strcat(dir, "awf.jpg"));
@@ -1498,7 +1502,7 @@ function draw(pic, L, ths, min_face_size, suffix)
     imwrite(pic, sprintf("hw_4_3_3_squared_pic_L_%s_%s.bmp", mat2str(L), suffix));
     title(sprintf("L = %s, ths = %s, min face size = %s", mat2str(L), mat2str(ths), mat2str(min_face_size)));
 end
-~~~
+```
 
 运行结果：
 
@@ -1510,7 +1514,7 @@ end
 
 图三中，图片的对比度增强了，可以看出，只有3张人脸识别成功，且框的大小变小了很多，这是因为我们的识别是基于彩色直方图的识别，与图片的颜色有很大的关联，只有图片中与训练数据颜色相近的人脸才能被识别出来。
 
-本问题代码位于`hw_4_3_2.m`中。相关图片位于`hw_4_3_3_*.bmp`中。
+本问题代码位于 `hw_4_3_2.m`中。相关图片位于 `hw_4_3_3_*.bmp`中。
 
 #### 4. 重新选择标准
 
@@ -1519,6 +1523,3 @@ end
 1. 基于轮廓的识别：人脸的轮廓处颜色变化剧烈，具有更多的高频分量，因此容易识别。但是考虑到人脸的方向、长宽可能在实际情况中有所不同，应当对训练数据进行旋转、拉伸，再进行训练，提高普适性；
 2. 基于 PCA 的特征脸识别：人脸具有很明显的特征（例如五官），可以通过训练数据得到一张“平均人脸”，检测时比较待测数据与平均人脸之间的各个特征之间的“距离”。
 3. 添加更多肤色的人脸数据集：对于不同人种、不同肤色的人脸，人脸识别的效果可能不同。通过在数据集中添加更多样的人脸数据，会提高人脸识别的普适性和准确性。
-
-
-
