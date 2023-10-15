@@ -377,7 +377,7 @@ function zigzag = zigzagScan(matrix)
   
     while index <= rows * cols
         zigzag(index) = matrix(row, col);
-      
+    
         if strcmp(direction, 'up')
             if col == cols
                 row = row + 1;
@@ -401,7 +401,7 @@ function zigzag = zigzagScan(matrix)
                 col = col - 1;
             end
         end
-      
+    
         index = index + 1;
     end
 end
@@ -495,7 +495,7 @@ function [jpeg_row, jpeg_col, dc_code, ac_code] = my_encode(pic, QTAB, DCTAB, AC
     dct2C_tilde = get_dct2C_tilde(pic, QTAB);
     dct2C_tilde_final = get_dct2C_tilde_final(dct2C_tilde);
     dc_code = get_dc_code(dct2C_tilde_final, DCTAB);
-      
+    
     ac_code = [];
     for i = 1:length(dct2C_tilde_final)
         single_block = dct2C_tilde_final(:, i);
@@ -1206,7 +1206,7 @@ end
 
 ![image-20230917134357176](D:\STUDY\课程资料\Matlab\图像处理大作业\图像处理大作业\report.assets\image-20230917134357176.png)
 
-原因分析：方法一对每一个 DCT 系数都造成了影响，因此对图像质量的干扰较大，而且可能增加了矩阵中 0 的数量，导致压缩率降低；方法二仅微调 DCT 系数矩阵的 DC 系数，而根据第二章练习题第5题的分析，DC 系数通过差分编码之后滤去了DC系数的低频分量，高频分量占主要成分，微调DC系数对这些高频分量不会造成太大的影响，对图像整体影响不大，且这样的修改基本不会造成 DC 编码长度的改变，压缩比与原图一致；方法三修改末尾的0，也会降低一些压缩比，而且末尾部分对应高频分量系数，将这些分量修改为非 0 值，会导致更多的高频分量出现，因而图像颜色会发生高频率变化，显得有点“脏”。
+原因分析：方法一对每一个 DCT 系数都造成了影响，因此对图像质量的干扰较大，而且可能增加了矩阵中 0 的数量，导致压缩率降低；方法二仅微调 DCT 系数矩阵的 DC 系数，DC 系数对应原图像的低频分量，微调不会造成图像质量的太大变化，也不会造成压缩比的太大变化；方法三修改末尾的0，AC 编码变长，也会降低一些压缩比，而且末尾部分对应高频分量系数，将这些分量修改为非 0 值，会导致更多的高频分量出现，因而图像颜色会发生高频率变化，显得有点“脏”。
 
 本问题代码位于 `hw_3_4_2.m`中。图片位于 `hw_3_4_2_*.bmp`中。
 
@@ -1399,7 +1399,7 @@ function squares = get_all_squares(pic, valid, v, L, ths, min_face_size)
                         square(top, l) = true;
                         square(bottom, l) = true;
                     end
-                  
+                
                     for l = top:bottom
                         square(l, left) = true;
                         square(l, right) = true;
